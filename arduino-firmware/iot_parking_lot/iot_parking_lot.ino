@@ -1,6 +1,7 @@
 #include <SPI.h>
 #include <MFRC522.h>
 
+int mode=1;
 int SS_PIN[3] = {5, 7, 9};
 int RST_PIN[3] = {4, 6, 8};
 
@@ -19,6 +20,23 @@ void setup() {
 }
 
 void loop() {
+  switch(mode){
+    case 1:
+      checkAppointment();
+      break;
+    case 2:
+      checkArrival();
+      break;
+    case 3:
+      scanIC();
+      break;
+    case 4:
+      waitForCorrectPosition();
+      break;
+  }
+}
+
+void scanIC() {
   for (int i = 0; i <= 1; i++) {
     for (int j = 0; j <= 1; j++) {
       if (j == i)digitalWrite(SS_PIN[j], 0);

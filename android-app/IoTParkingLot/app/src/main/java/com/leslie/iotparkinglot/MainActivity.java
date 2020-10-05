@@ -7,10 +7,12 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CpuUsageInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private final static String MY_UUID = "00001101-0000-1000-8000-00805F9B34FB";   //SPP服务UUID号
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); //获取蓝牙实例
     private String smsg = ""; //显示用数据缓存
-    private Button[] buttons = new Button[8];
+    private Button[] buttons=new Button[4];
 
     BluetoothDevice mBluetoothDevice = null; //蓝牙设备
     BluetoothSocket mBluetoothSocket = null; //蓝牙通信Socket
@@ -117,116 +119,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button sendButton4 = (Button) findViewById(R.id.sendButton4);
-        sendButton4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mBluetoothSocket == null) {
-                    Toast.makeText(getApplicationContext(), "请先连接设备", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                try {
-                    OutputStream os = mBluetoothSocket.getOutputStream();
-                    os.write(4);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        Button sendButton5 = (Button) findViewById(R.id.sendButton5);
-        sendButton5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mBluetoothSocket == null) {
-                    Toast.makeText(getApplicationContext(), "请先连接设备", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                try {
-                    OutputStream os = mBluetoothSocket.getOutputStream();
-                    os.write(5);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        Button sendButton6 = (Button) findViewById(R.id.sendButton6);
-        sendButton6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mBluetoothSocket == null) {
-                    Toast.makeText(getApplicationContext(), "请先连接设备", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                try {
-                    OutputStream os = mBluetoothSocket.getOutputStream();
-                    os.write(6);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        Button sendButton7 = (Button) findViewById(R.id.sendButton7);
-        sendButton7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mBluetoothSocket == null) {
-                    Toast.makeText(getApplicationContext(), "请先连接设备", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                try {
-                    OutputStream os = mBluetoothSocket.getOutputStream();
-                    os.write(7);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        Button sendButton8 = (Button) findViewById(R.id.sendButton8);
-        sendButton8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mBluetoothSocket == null) {
-                    Toast.makeText(getApplicationContext(), "请先连接设备", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                try {
-                    OutputStream os = mBluetoothSocket.getOutputStream();
-                    os.write(8);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        Button sendButton9 = (Button) findViewById(R.id.sendButton9);
-        sendButton9.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mBluetoothSocket == null) {
-                    Toast.makeText(getApplicationContext(), "请先连接设备", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                try {
-                    OutputStream os = mBluetoothSocket.getOutputStream();
-                    os.write(9);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        buttons[0]=sendButton2;
-        buttons[1]=sendButton3;
-        buttons[2]=sendButton4;
-        buttons[3]=sendButton5;
-        buttons[4]=sendButton6;
-        buttons[5]=sendButton7;
-        buttons[6]=sendButton8;
-        buttons[7]=sendButton9;
+        buttons[2]=sendButton2;
+        buttons[3]=sendButton3;
+        buttons[2].setBackgroundColor(Color.rgb(255, 0, 0));
+        buttons[3].setBackgroundColor(Color.rgb(255, 0, 0));
 
         // 设置设备可以被搜索
         new Thread() {
@@ -261,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         mBluetoothSocket.connect();
                         Toast.makeText(this, "连接" + mBluetoothDevice.getName() + "成功！", Toast.LENGTH_SHORT).show();
-                        connectButton.setText("断开连接");
+                        connectButton.setText("退出登录");
                     } catch (IOException e) {
                         try {
                             Toast.makeText(this, "连接失败！", Toast.LENGTH_SHORT).show();
@@ -326,14 +222,25 @@ public class MainActivity extends AppCompatActivity {
     Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            for (int i=0;i<8;i++) {
-                if (smsg.charAt(i) == '1')
-                    buttons[i].setBackgroundColor(Color.rgb(0, 255, 0));
-                else
-                    buttons[i].setBackgroundColor(Color.rgb(255, 0, 0));
+            switch (smsg.charAt(0)){
+                case '2':
+                    buttons[2].setBackgroundColor(Color.rgb(0, 255, 0));
+                    break;
+                case '3':
+                    buttons[3].setBackgroundColor(Color.rgb(0, 255, 0));
+                    ImageView imageView=findViewById(R.id.imageView);
+                    imageView.setImageAlpha(100);
+                    break;
+                case '4':
+                    TextView textView=findViewById(R.id.textView);
+                    textView.setTextColor(Color.rgb(255,0,0));
+                    textView.setText("停错车位了，注意看地图！");
+                    break;
+                case '5':
+                    TextView textView1=findViewById(R.id.textView);
+                    textView1.setTextColor(Color.rgb(0,255,0));
+                    textView1.setText("成功完成停车！");
             }
-            TextView textView=findViewById(R.id.textView3);
-            textView.setText(smsg);
         }
     };
 
