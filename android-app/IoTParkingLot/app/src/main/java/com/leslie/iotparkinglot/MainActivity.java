@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private final static String MY_UUID = "00001101-0000-1000-8000-00805F9B34FB";   //SPP服务UUID号
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); //获取蓝牙实例
     private String smsg = ""; //显示用数据缓存
-    private Button[] buttons=new Button[4];
+    private Button[] buttons=new Button[7];
 
     BluetoothDevice mBluetoothDevice = null; //蓝牙设备
     BluetoothSocket mBluetoothSocket = null; //蓝牙通信Socket
@@ -119,10 +119,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button sendButton6 = (Button) findViewById(R.id.sendButton6);
+        sendButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mBluetoothSocket == null) {
+                    Toast.makeText(getApplicationContext(), "请先连接设备", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                try {
+                    OutputStream os = mBluetoothSocket.getOutputStream();
+                    os.write(6);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         buttons[2]=sendButton2;
         buttons[3]=sendButton3;
+        buttons[6]=sendButton6;
         buttons[2].setBackgroundColor(Color.rgb(255, 0, 0));
         buttons[3].setBackgroundColor(Color.rgb(255, 0, 0));
+        buttons[6].setBackgroundColor(Color.rgb(100, 100, 100));
 
         // 设置设备可以被搜索
         new Thread() {
@@ -240,6 +259,13 @@ public class MainActivity extends AppCompatActivity {
                     TextView textView1=findViewById(R.id.textView);
                     textView1.setTextColor(Color.rgb(0,255,0));
                     textView1.setText("成功完成停车！");
+                    break;
+                case '6':
+                    ImageView imageView1=findViewById(R.id.imageView);
+                    imageView1.setImageAlpha(0);
+                    TextView textView2=findViewById(R.id.textView);
+                    textView2.setText("已取消！");
+                    break;
             }
         }
     };

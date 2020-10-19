@@ -128,4 +128,14 @@
         app:layout_constraintVertical_bias="0.383"
         app:srcCompat="@drawable/map" />
 
+    <Button
+        android:id="@+id/sendButton6"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="取消停车"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline6" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
