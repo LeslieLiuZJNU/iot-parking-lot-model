@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Button sendButton6 = (Button) findViewById(R.id.sendButton6);
-        sendButton2.setOnClickListener(new View.OnClickListener() {
+        sendButton6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mBluetoothSocket == null) {
