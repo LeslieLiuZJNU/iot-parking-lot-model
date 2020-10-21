@@ -4,6 +4,7 @@
 #include <MFRC522.h>
 #include <U8glib.h>
 
+#define INIT_PIN 12
 #define CAR_UP 90
 #define CAR_DOWN 180
 #define DOOR_UP 180
@@ -39,6 +40,9 @@ void setup() {
   SPI.begin(); //Init SPI bus
   for (int i = 0; i <= 1; i++)
     rfids[i].PCD_Init(); //Init RC522
+  digitalWrite(INIT_PIN,HIGH);
+  pinMode(INIT_PIN,OUTPUT);
+  digitalWrite(INIT_PIN,HIGH);
 }
 
 void loop() {
@@ -54,6 +58,9 @@ void loop() {
       break;
     case 4:
       waitForCorrectPosition();
+      break;
+    case 7:
+      initAll();
       break;
   }
 }
@@ -184,4 +191,8 @@ void waitForCorrectPosition() {
 
   //Stop reading
   rfids[i].PCD_StopCrypto1();
+}
+
+void initAll(){
+  digitalWrite(INIT_PIN,LOW);
 }
