@@ -28,7 +28,9 @@ public class MainActivity extends AppCompatActivity {
     private final static String MY_UUID = "00001101-0000-1000-8000-00805F9B34FB";   //SPP服务UUID号
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); //获取蓝牙实例
     private String smsg = ""; //显示用数据缓存
-    private Button[] buttons=new Button[7];
+    private Button[] buttons = new Button[7];
+    private ImageView imageView;
+    private TextView textView;
 
     BluetoothDevice mBluetoothDevice = null; //蓝牙设备
     BluetoothSocket mBluetoothSocket = null; //蓝牙通信Socket
@@ -41,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        imageView = findViewById(R.id.imageView);
+        textView = findViewById(R.id.textView);
 
         //如果打不开蓝牙提示信息，结束程序
         if (mBluetoothAdapter == null) {
@@ -136,9 +141,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        buttons[2]=sendButton2;
-        buttons[3]=sendButton3;
-        buttons[6]=sendButton6;
+        buttons[2] = sendButton2;
+        buttons[3] = sendButton3;
+        buttons[6] = sendButton6;
         buttons[2].setBackgroundColor(Color.rgb(255, 0, 0));
         buttons[3].setBackgroundColor(Color.rgb(255, 0, 0));
         buttons[6].setBackgroundColor(Color.rgb(100, 100, 100));
@@ -210,28 +215,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //接收数据线程
-    Thread readThread=new Thread(){
+    Thread readThread = new Thread() {
 
-        public void run(){
+        public void run() {
             byte[] buffer = new byte[1024];
             bRun = true;
             //接收线程
-            while(true){
-                try{
-                    while(is.available()==0){
-                        while(bRun == false){}
+            while (true) {
+                try {
+                    while (is.available() == 0) {
+                        while (bRun == false) {
+                        }
                     }
-                    while(true){
-                        if(!bThread)//跳出循环
+                    while (true) {
+                        if (!bThread)//跳出循环
                             return;
 
                         is.read(buffer);         //读入数据
-                        smsg=new String(buffer);   //写入接收缓存
-                        if(is.available()==0)break;  //短时间没有数据才跳出进行显示
+                        smsg = new String(buffer);   //写入接收缓存
+                        if (is.available() == 0) break;  //短时间没有数据才跳出进行显示
                     }
                     //发送显示消息，进行显示刷新
                     handler.sendMessage(handler.obtainMessage());
-                }catch(IOException e){
+                } catch (IOException e) {
                 }
             }
         }
@@ -241,30 +247,26 @@ public class MainActivity extends AppCompatActivity {
     Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (smsg.charAt(0)){
+            switch (smsg.charAt(0)) {
                 case '2':
                     buttons[2].setBackgroundColor(Color.rgb(0, 255, 0));
                     break;
                 case '3':
                     buttons[3].setBackgroundColor(Color.rgb(0, 255, 0));
-                    ImageView imageView=findViewById(R.id.imageView);
-                    imageView.setImageAlpha(100);
+                    imageView.setAlpha(1.0f);
                     break;
                 case '4':
-                    TextView textView=findViewById(R.id.textView);
-                    textView.setTextColor(Color.rgb(255,0,0));
+                    textView.setTextColor(Color.rgb(255, 0, 0));
                     textView.setText("停错车位了，注意看地图！");
                     break;
                 case '5':
-                    TextView textView1=findViewById(R.id.textView);
-                    textView1.setTextColor(Color.rgb(0,255,0));
-                    textView1.setText("成功完成停车！");
+                    imageView.setAlpha(0.0f);
+                    textView.setTextColor(Color.rgb(0, 255, 0));
+                    textView.setText("成功完成停车！");
                     break;
                 case '6':
-                    ImageView imageView1=findViewById(R.id.imageView);
-                    imageView1.setImageAlpha(0);
-                    TextView textView2=findViewById(R.id.textView);
-                    textView2.setText("已取消！");
+                    imageView.setAlpha(0.0f);
+                    textView.setText("已取消！");
                     break;
             }
         }

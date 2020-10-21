@@ -4,10 +4,10 @@
 #include <MFRC522.h>
 #include <U8glib.h>
 
-#define CAR_UP 0
+#define CAR_UP 90
 #define CAR_DOWN 180
-#define DOOR_UP 0
-#define DOOR_DOWN 180
+#define DOOR_UP 180
+#define DOOR_DOWN 90
 
 int mode = 1;
 int SS_PIN[2] = {5, 7};
@@ -18,7 +18,7 @@ U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_NONE);
 Servo s_door;
 Servo s_car;
 
-SoftwareSerial bt(2, 3);
+SoftwareSerial bt(10, 11);
 
 MFRC522 rfid_wrong(SS_PIN[0], RST_PIN[0]);
 MFRC522 rfid_right(SS_PIN[1], RST_PIN[1]);
@@ -90,12 +90,13 @@ void checkAppointment() {
   if (bt.available()) {
     int in = bt.read();
     if (in == 2) {
+      Serial.print(in);
       bt.print("2");
-      Serial.print("2");
       mode = 2;
       s_car.write(CAR_UP);
       screenShow(1);
     }
+
   }
 }
 
@@ -149,6 +150,16 @@ void scanIC() {
 }
 
 void waitForCorrectPosition() {
+  if (bt.available()) {
+    int in = bt.read();
+    if (in == 6) {
+      bt.print("6");
+      Serial.print("6");
+      mode = 6;
+      s_door.write(DOOR_DOWN);
+      screenShow(1);
+    }
+  }
   int i = 1;
   for (int j = 0; j <= 1; j++) {
     if (j == i)digitalWrite(SS_PIN[j], 0);
