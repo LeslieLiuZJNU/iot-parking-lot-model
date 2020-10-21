@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button sendButton2 = (Button) findViewById(R.id.sendButton2);
+        final Button sendButton2 = (Button) findViewById(R.id.sendButton2);
         sendButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,6 +147,28 @@ public class MainActivity extends AppCompatActivity {
         buttons[2].setBackgroundColor(Color.rgb(255, 0, 0));
         buttons[3].setBackgroundColor(Color.rgb(255, 0, 0));
         buttons[6].setBackgroundColor(Color.rgb(100, 100, 100));
+
+        Button resetButton = (Button) findViewById(R.id.resetButton);
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mBluetoothSocket == null) {
+                    Toast.makeText(getApplicationContext(), "请先连接设备", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                try {
+                    OutputStream os = mBluetoothSocket.getOutputStream();
+                    os.write(7);
+                    imageView.setAlpha(0.0f);
+                    textView.setText("无消息");
+                    buttons[2].setBackgroundColor(Color.rgb(255, 0, 0));
+                    buttons[3].setBackgroundColor(Color.rgb(255, 0, 0));
+                    buttons[6].setBackgroundColor(Color.rgb(100, 100, 100));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         // 设置设备可以被搜索
         new Thread() {
