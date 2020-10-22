@@ -36,7 +36,6 @@ void setup() {
   s_car.attach(9);
   s_car.write(CAR_DOWN);
   bt.begin(9600);
-  Serial.begin(9600);
   SPI.begin(); //Init SPI bus
   for (int i = 0; i <= 1; i++)
     rfids[i].PCD_Init(); //Init RC522
@@ -58,6 +57,12 @@ void loop() {
       break;
     case 4:
       waitForCorrectPosition();
+      break;
+    case 5:
+      waitForInit();
+      break;
+    case 6:
+      waitForInit();
       break;
     case 7:
       initAll();
@@ -97,7 +102,6 @@ void checkAppointment() {
   if (bt.available()) {
     int in = bt.read();
     if (in == 2) {
-      Serial.print(in);
       bt.print("2");
       mode = 2;
       s_car.write(CAR_UP);
@@ -112,7 +116,6 @@ void checkArrival() {
     int in = bt.read();
     if (in == 3) {
       bt.print("3");
-      Serial.print("3");
       mode = 3;
       s_door.write(DOOR_DOWN);
       s_car.write(CAR_DOWN);
@@ -139,13 +142,11 @@ void scanIC() {
     if (i == 0) {
       mode = 4;
       bt.print("4");
-      Serial.print("4");
       screenShow(0);
     }
     else if (i == 1) {
       mode = 5;
       bt.print("5");
-      Serial.print("5");
     }
 
     //Let the holding card be in sleep mode, make sure to read once
@@ -161,7 +162,6 @@ void waitForCorrectPosition() {
     int in = bt.read();
     if (in == 6) {
       bt.print("6");
-      Serial.print("6");
       mode = 6;
       s_door.write(DOOR_DOWN);
       screenShow(1);
@@ -183,7 +183,6 @@ void waitForCorrectPosition() {
 
   mode = 5;
   bt.print("5");
-  Serial.print("5");
   screenShow(1);
 
   //Let the holding card be in sleep mode, make sure to read once
@@ -191,6 +190,16 @@ void waitForCorrectPosition() {
 
   //Stop reading
   rfids[i].PCD_StopCrypto1();
+}
+
+void waitForInit(){
+  if (bt.available()) {
+    int in = bt.read();
+    if (in == 7) {
+      bt.print("7");
+      mode = 7;
+    }
+  }
 }
 
 void initAll(){
