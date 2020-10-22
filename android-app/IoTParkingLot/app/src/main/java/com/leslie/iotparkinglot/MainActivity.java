@@ -160,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
                     OutputStream os = mBluetoothSocket.getOutputStream();
                     os.write(7);
                     imageView.setAlpha(0.0f);
+                    textView.setTextColor(Color.rgb(0,0,0));
                     textView.setText("无消息");
                     buttons[2].setBackgroundColor(Color.rgb(255, 0, 0));
                     buttons[3].setBackgroundColor(Color.rgb(255, 0, 0));
