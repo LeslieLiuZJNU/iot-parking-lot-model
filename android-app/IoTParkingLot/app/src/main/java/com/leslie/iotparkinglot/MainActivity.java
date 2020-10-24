@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case '6':
                     imageView.setAlpha(0.0f);
-                    textView.setText("已取消！");
+                    textView.setText("取消停车，费用已合并！");
                     break;
             }
         }
