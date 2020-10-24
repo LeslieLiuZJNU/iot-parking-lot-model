@@ -159,11 +159,6 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     OutputStream os = mBluetoothSocket.getOutputStream();
                     os.write(7);
-                    imageView.setAlpha(0.0f);
-                    textView.setText("无消息");
-                    buttons[2].setBackgroundColor(Color.rgb(255, 0, 0));
-                    buttons[3].setBackgroundColor(Color.rgb(255, 0, 0));
-                    buttons[6].setBackgroundColor(Color.rgb(100, 100, 100));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -289,6 +284,14 @@ public class MainActivity extends AppCompatActivity {
                 case '6':
                     imageView.setAlpha(0.0f);
                     textView.setText("取消停车，费用已合并！");
+                    break;
+                case '7':
+                    imageView.setAlpha(0.0f);
+                    textView.setTextColor(Color.rgb(0, 0, 0));
+                    textView.setText("无消息");
+                    buttons[2].setBackgroundColor(Color.rgb(255, 0, 0));
+                    buttons[3].setBackgroundColor(Color.rgb(255, 0, 0));
+                    buttons[6].setBackgroundColor(Color.rgb(100, 100, 100));
                     break;
             }
         }
